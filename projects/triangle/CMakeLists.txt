@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.12)
 
 project(HelloTriangle VERSION 0.0.0)
 
-add_executable(HelloTriangle src/main.cpp)
+add_executable(HelloTriangle 
+"src/main.cpp"
+"src/window.cpp"
+"src/vulkan_engine.cpp")
 
 set_target_properties(
     HelloTriangle PROPERTIES
