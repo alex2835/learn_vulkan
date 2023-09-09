@@ -20,7 +20,7 @@ public:
     {
         while( !mWindow.ShouldClose() )
         {
-            mWindow.Update();
+            mWindow.Update(); 
             mVulkanEngine.drawFrame();
         }
         mVulkanEngine.DeviceWaitIdle();
@@ -33,10 +33,9 @@ private:
 
 int main( void )
 {
-    HelloTriangleApplication app;
-
     try
     {
+        HelloTriangleApplication app;
         app.run();
     } 
     catch( const std::exception& e )
