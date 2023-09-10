@@ -1,20 +1,21 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(HelloTriangle VERSION 0.0.0)
+set(TARGET_NAME HelloTriangle)
 
-add_executable(HelloTriangle 
-"src/main.cpp"
-"src/window.cpp"
-"src/vulkan_renderer.cpp")
-
-set_target_properties(
-    HelloTriangle PROPERTIES
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED ON
+file(GLOB_RECURSE SRCS
+     "*.hpp"
+     "*.cpp"
 )
+add_executable(${TARGET_NAME} ${SRCS})
 
-target_link_libraries(HelloTriangle glfw)
+target_include_directories(${TARGET_NAME} PUBLIC include)
+target_link_libraries(${TARGET_NAME} Vulkan::Vulkan)
+target_link_libraries(${TARGET_NAME} glfw)
+target_link_libraries(${TARGET_NAME} glm::glm)
+target_link_libraries(${TARGET_NAME} imgui)
 
-include_directories( HelloTriangle PUBLIC $ENV{VULKAN_SDK}/include )
-target_link_directories( HelloTriangle PUBLIC $ENV{VULKAN_SDK}/Lib )
-target_link_libraries( HelloTriangle vulkan-1.lib )
+# Shaders
+include(${CMAKE_SOURCE_DIR}/cmake/embed-data.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/compile_shaders.cmake)
+file(GLOB_RECURSE SHADERS "${CMAKE_SOURCE_DIR}/shaders/*.vert" "${CMAKE_SOURCE_DIR}/shaders/*.frag")
+compile_shaders(${TARGET_NAME} ${SHADERS})

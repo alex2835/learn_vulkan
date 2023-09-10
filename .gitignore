@@ -2,6 +2,7 @@
 **/.vs/**
 **/build/**
 **/out/**
+**/temp/**
 */venv/*
 # Created by http://www.gitignore.io
 

@@ -1,55 +1,49 @@
+#include <vks/Window.hpp>
 
-#include "window.hpp"
-#include <stdexcept>
+#include <vks/Instance.hpp>
 
-void FramebufferResizeCallback( GLFWwindow* window, int width, int height )
-{
-    auto w = reinterpret_cast<Window*>( glfwGetWindowUserPointer( window ) );
-    w->mFramebufferResized = true;
+#include <exception>
+#include <iostream>
+
+using namespace vks;
+
+Window::Window(const glm::ivec2& dimensions, const std::string& title, const Instance& instance)
+    : m_dimensions(dimensions),
+      m_title(title),
+      m_instance(instance),
+      m_surface(VK_NULL_HANDLE),
+      m_framebufferResized(true),
+      m_drawFrameFunc([](bool&) {}) {
+  m_window = glfwCreateWindow(dimensions.x, dimensions.y, title.c_str(), nullptr, nullptr);
+  glfwSetWindowUserPointer(m_window, this);
+  glfwSetFramebufferSizeCallback(m_window, FramebufferResizeCallback);
+
+  if (glfwCreateWindowSurface(instance.handle(), m_window, nullptr, &m_surface) != VK_SUCCESS) {
+    throw std::runtime_error("Unable to create window surface");
+  }
 }
 
-Window::Window( std::string name, int width, int height )
-{
-    glfwInit();
-    glfwWindowHint( GLFW_CLIENT_API, GLFW_NO_API );
-
-    mWindow = glfwCreateWindow( width, height, name.c_str(), nullptr, nullptr);
-    glfwSetWindowUserPointer( mWindow, this );
-    glfwSetFramebufferSizeCallback( mWindow, FramebufferResizeCallback );
+Window::~Window() {
+  vkDestroySurfaceKHR(m_instance.handle(), m_surface, nullptr);
+  glfwDestroyWindow(m_window);
 }
 
-Window::~Window()
-{
-    glfwDestroyWindow( mWindow );
-    glfwTerminate();
-}
-
-void Window::Update()
-{
-    mFramebufferResized = false;
+void Window::mainLoop() {
+  while (!glfwWindowShouldClose(m_window)) {
     glfwPollEvents();
+    m_drawFrameFunc(m_framebufferResized);
+  }
 }
 
-WindowSize Window::GetSize()
-{
-    int width = 0, height = 0;
-    glfwGetFramebufferSize( mWindow, &width, &height );
-    return { width, height };
+void Window::GetRequiredExtensions(std::vector<const char*>& out) {
+  uint32_t glfwExtensionCount = 0;
+  const char** glfwExtensions;
+  glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+  out.assign(glfwExtensions, glfwExtensions + glfwExtensionCount);
 }
 
-void Window::WaitEvents()
-{
-    mFramebufferResized = false;
-    glfwWaitEvents();
-}
-
-void Window::CreateSurface( VkInstance instance, VkSurfaceKHR* surface )
-{
-    if( glfwCreateWindowSurface( instance, mWindow, nullptr, surface ) != VK_SUCCESS )
-        throw std::runtime_error( "failed to create window surface!" );
-}
-
-bool Window::ShouldClose()
-{
-    return glfwWindowShouldClose( mWindow );
+void Window::FramebufferResizeCallback(GLFWwindow* window, int width, int height) {
+  Window* win = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+  win->m_framebufferResized = true;
 }
