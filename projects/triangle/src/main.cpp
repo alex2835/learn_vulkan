@@ -1,8 +1,7 @@
 
 
-#include "vulkan.hpp"
 #include "window.hpp"
-#include "vulkan_engine.hpp"
+#include "vulkan_renderer.hpp"
 
 
 const uint32_t WIDTH = 800;
@@ -13,22 +12,22 @@ public:
     
     HelloTriangleApplication()
         : mWindow( "Vulkan", WIDTH, HEIGHT ),
-          mVulkanEngine( mWindow )
+          mVulkanRenderer( mWindow )
     {}
 
     void run()
     {
         while( !mWindow.ShouldClose() )
         {
-            mWindow.Update(); 
-            mVulkanEngine.drawFrame();
+            mWindow.Update();
+            mVulkanRenderer.drawFrame();
         }
-        mVulkanEngine.DeviceWaitIdle();
+        mVulkanRenderer.DeviceWaitIdle();
     }
 
 private:
     Window mWindow;
-    VulkanEngine mVulkanEngine;
+    VulkanRenderer mVulkanRenderer;
 };
 
 int main( void )

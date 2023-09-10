@@ -5,7 +5,7 @@ project(HelloTriangle VERSION 0.0.0)
 add_executable(HelloTriangle 
 "src/main.cpp"
 "src/window.cpp"
-"src/vulkan_engine.cpp")
+"src/vulkan_renderer.cpp")
 
 set_target_properties(
     HelloTriangle PROPERTIES
@@ -15,17 +15,6 @@ set_target_properties(
 
 target_link_libraries(HelloTriangle glfw)
 
-include_directories(
-    HelloTriangle PUBLIC
-    $ENV{VULKAN_SDK}/include
-)
-
-target_link_directories(
-    HelloTriangle PUBLIC
-    $ENV{VULKAN_SDK}/Lib
-)
-
-target_link_libraries(
-    HelloTriangle
-    vulkan-1.lib
-)
+include_directories( HelloTriangle PUBLIC $ENV{VULKAN_SDK}/include )
+target_link_directories( HelloTriangle PUBLIC $ENV{VULKAN_SDK}/Lib )
+target_link_libraries( HelloTriangle vulkan-1.lib )

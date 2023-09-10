@@ -1,6 +1,7 @@
 #pragma once
 
-#include "vulkan.hpp"
+#include "vulkan/vulkan.hpp"
+#include <GLFW/glfw3.h>
 #include <string>
 
 struct WindowSize

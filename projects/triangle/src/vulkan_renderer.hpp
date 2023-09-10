@@ -1,6 +1,7 @@
 #pragma once
 
 #include "window.hpp"
+#include "vulkan/vulkan.hpp"
 #include <vector>
 #include <optional>
 #include <stdexcept>
@@ -56,11 +57,11 @@ struct SwapChainSupportDetails
 
 
 
-class VulkanEngine
+class VulkanRenderer
 {
 public:
-    VulkanEngine();
-    VulkanEngine( Window& window );
+    VulkanRenderer();
+    VulkanRenderer( Window& window );
 
     void initVulkan();
     void cleanupSwapChain();
@@ -99,33 +100,33 @@ private:
 
     Window& mWindow;
 
-    VkInstance mInstance;
-    VkDebugUtilsMessengerEXT mDebugMessenger;
-    VkSurfaceKHR mSurface;
+    VkInstance instance;
+    VkDebugUtilsMessengerEXT debugMessenger;
+    VkSurfaceKHR surface;
 
-    VkPhysicalDevice mPhysicalDevice = VK_NULL_HANDLE;
-    VkDevice mDevice;
+    VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+    VkDevice device;
 
-    VkQueue mGraphicsQueue;
-    VkQueue mPresentQueue;
+    VkQueue graphicsQueue;
+    VkQueue presentQueue;
 
-    VkSwapchainKHR mSwapChain;
-    std::vector<VkImage> mSwapChainImages;
-    VkFormat mSwapChainImageFormat;
-    VkExtent2D mSwapChainExtent;
-    std::vector<VkImageView> mSwapChainImageViews;
-    std::vector<VkFramebuffer> mSwapChainFramebuffers;
+    VkSwapchainKHR swapChain;
+    std::vector<VkImage> swapChainImages;
+    VkFormat swapChainImageFormat;
+    VkExtent2D swapChainExtent;
+    std::vector<VkImageView> swapChainImageViews;
+    std::vector<VkFramebuffer> swapChainFramebuffers;
 
-    VkRenderPass mRenderPass;
-    VkPipelineLayout mPipelineLayout;
-    VkPipeline mGraphicsPipeline;
+    VkRenderPass renderPass;
+    VkPipelineLayout pipelineLayout;
+    VkPipeline graphicsPipeline;
 
-    VkCommandPool mCommandPool;
-    std::vector<VkCommandBuffer> mCommandBuffers;
+    VkCommandPool commandPool;
+    std::vector<VkCommandBuffer> commandBuffers;
 
-    std::vector<VkSemaphore> mImageAvailableSemaphores;
-    std::vector<VkSemaphore> mRenderFinishedSemaphores;
-    std::vector<VkFence> mInFlightFences;
-    uint32_t mCurrentFrame = 0;
+    std::vector<VkSemaphore> imageAvailableSemaphores;
+    std::vector<VkSemaphore> renderFinishedSemaphores;
+    std::vector<VkFence> inFlightFences;
+    uint32_t currentFrame = 0;
 
 };
