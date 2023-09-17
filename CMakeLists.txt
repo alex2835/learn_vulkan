@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.12)
-project(HelloTriangle VERSION 0.0.0)
 
 set (CMAKE_CXX_STANDARD 20)
 
@@ -11,4 +10,4 @@ endif()
 # Dependencies
 add_subdirectory(vendors)
 # Projects
-add_subdirectory(projects/triangle)
+add_subdirectory(projects)
